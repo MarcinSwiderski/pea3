@@ -1,0 +1,20 @@
+﻿  genetic_tsp.cpp
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(68,30): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(68,60): warning C4018: '>': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(89,30): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(89,60): warning C4018: '>': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(103,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(121,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(191,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(207,20): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(218,64): warning C4018: '<': signed/unsigned mismatch
+C:\Users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(251,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  main.cpp
+  menu.cpp
+  params.cpp
+  Generating code
+  1 of 682 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  pea_3_cpp_2000.vcxproj -> C:\Users\marsw\source\repos\pea_3_cpp_2000\Release\pea_3_cpp_2000.exe

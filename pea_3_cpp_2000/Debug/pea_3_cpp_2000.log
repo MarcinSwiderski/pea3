@@ -1,0 +1,16 @@
+﻿  FileReader.cpp
+  genetic_tsp.cpp
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(73): warning C4018: '<': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(73): warning C4018: '>': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(104): warning C4018: '>': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(124): warning C4018: '<': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(142): warning C4018: '<': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(212): warning C4018: '<': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(228): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(239): warning C4018: '<': signed/unsigned mismatch
+c:\users\marsw\source\repos\pea_3_cpp_2000\pea_3_cpp_2000\genetic_tsp.cpp(272): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  main.cpp
+  menu.cpp
+  Generating Code...
+  pea_3_cpp_2000.vcxproj -> C:\Users\marsw\source\repos\pea_3_cpp_2000\Debug\pea_3_cpp_2000.exe
