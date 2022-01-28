@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="genetic_tsp.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,7 +146,6 @@
     <ClCompile Include="params.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileReader.hpp" />
     <ClInclude Include="genetic_tsp.hpp" />
     <ClInclude Include="Graph.hpp" />
     <ClInclude Include="menu.hpp" />

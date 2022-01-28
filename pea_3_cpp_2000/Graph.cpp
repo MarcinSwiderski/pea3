@@ -1,114 +1,167 @@
+//#include "pch.h"
 #include "Graph.hpp"
+#include <fstream>
+#include <time.h>
+#include <string>
+#include <iostream>
 
-Graph::Graph() : vertexCount(0), Nmatrix(nullptr)
+string Graph::getDescription()
 {
+	if (!vert_count)
+	{
+		return "Brak danych\n";
+	}
+	else
+	{
+		return description;
+	}
+
 }
 
-Graph::Graph(int _vertexCount) : vertexCount(_vertexCount)
+string Graph::toString()
 {
-    Nmatrix = new int *[vertexCount];
-    for (int v_idx = 0; v_idx < vertexCount; v_idx++)
-    {
-        Nmatrix[v_idx] = new int[vertexCount];
-    }
+	string graph = "";
+	graph.append(description);
+
+	if (vert_count)
+	{
+		for (int r = 0; r < vert_count; r++)
+		{
+			for (int c = 0; c < vert_count; c++)
+			{
+				if ((matrix[r][c] < 10) && (matrix[r][c] >= 0))
+					graph += to_string(matrix[r][c]) + "    ";
+
+				else if (((matrix[r][c] < 100) && (matrix[r][c] > 9)) || (matrix[r][c] < 0))
+					graph += to_string(matrix[r][c]) + "   ";
+				else if (matrix[r][c] == 100000000)
+					graph += "N    ";
+				else
+					graph += to_string(matrix[r][c]) + "  ";
+			}
+			graph += "\n";
+		}
+	}
+	else
+	{
+		graph = "Graf pusty\n";
+	}
+	return graph;
 }
 
-Graph::Graph(Graph &graph)
+bool Graph::infDiag()
 {
-    /** alocate mmemory for Nmatrix */
-    vertexCount = graph.vertexCount;
-    Nmatrix = new int *[vertexCount];
-    for (int v_idx = 0; v_idx < vertexCount; v_idx++)
-    {
-        Nmatrix[v_idx] = new int[vertexCount];
-    }
-
-    /** fill Nmatrix */
-    for (int row_idx = 0; row_idx < vertexCount; row_idx++)
-    {
-        for (int col_idx = 0; col_idx < vertexCount; col_idx++)
-        {
-            Nmatrix[row_idx][col_idx] = graph.at(row_idx, col_idx);
-        }
-    }
-}
-
-Graph::~Graph()
-{
-    if (Nmatrix != nullptr)
-    {
-        for (int v_idx = 0; v_idx < vertexCount; v_idx++)
-        {
-            if (Nmatrix[v_idx] != nullptr)
-                delete Nmatrix[v_idx];
-        }
-        delete Nmatrix;
-    }
-}
-
-void Graph::fill(int rows, int cols, int **matrix)
-{
-    for (int row_idx = 0; row_idx < rows; row_idx++)
-    {
-        for (int col_idx = 0; col_idx < cols; col_idx++)
-        {
-            Nmatrix[row_idx][col_idx] = matrix[row_idx][col_idx];
-        }
-    }
+	if (!vert_count)
+		return false;
+	else
+	{
+		for (int i = 0; i < vert_count; i++)
+		{
+			matrix[i][i] = INF;
+		}
+		return true;
+	}
 }
 
 int Graph::at(int row, int col)
 {
-    if (row < 0 || row >= vertexCount || col < 0 || col >= vertexCount)
-        throw std::out_of_range("access to row or col out of range index");
-    return Nmatrix[row][col];
+	if (row < 0 || row >= vert_count || col < 0 || col >= vert_count)
+		throw std::out_of_range("access to row or col out of range index");
+	return matrix[row][col];
 }
 
-void Graph::set(int row, int col, int weight)
+bool Graph::readGraph(string file)
 {
-    if (row < 0 || row >= vertexCount || col < 0 || col >= vertexCount)
-        throw std::out_of_range("access to row or col out of range index");
-    Nmatrix[row][col] = weight;
+
+	int** temp;
+	description = "";
+	string tempDesc = "";
+
+	ifstream fin;
+	fin.open(file);
+
+	if (fin.fail() || fin.eof())
+	{
+		cout << "plik nie zostal wczytany";
+		return false;
+	}
+
+	if (vert_count)
+	{
+		for (int i = 0; i < vert_count; i++)
+		{
+			delete[] matrix[i];
+		}
+
+		delete[] matrix;
+	}
+
+	getline(fin, tempDesc);
+
+	description.append(tempDesc + "\n");
+
+	getline(fin, tempDesc);
+
+	description.append(tempDesc + "\n");
+
+	getline(fin, tempDesc);
+
+	description.append(tempDesc + "\n");
+
+	fin >> tempDesc;
+
+	description.append(tempDesc);
+
+	fin >> vert_count;
+
+
+
+	description.append(to_string(vert_count) + "\n");
+
+
+
+	getline(fin, tempDesc);
+	getline(fin, tempDesc);
+	getline(fin, tempDesc);
+	getline(fin, tempDesc);
+
+	temp = new int* [vert_count];
+
+	for (int i = 0; i < vert_count; i++)
+	{
+		temp[i] = new int[vert_count];
+	}
+
+	for (int c = 0; c < vert_count; c++)
+	{
+		for (int r = 0; r < vert_count; r++)
+		{
+			fin >> temp[r][c];
+		}
+	}
+
+	fin.close();
+
+	matrix = temp;
+	return true;
 }
 
 int Graph::getVertexCount()
 {
-    return vertexCount;
+	return vert_count;
 }
 
-int **Graph::getNmatrix()
+Graph::Graph()
 {
-    return Nmatrix;
+
 }
 
-void Graph::show()
+Graph::~Graph()
 {
-    try
-    {
-        std::cout << "{ ";
-        for (int row_idx = 0; row_idx < vertexCount; row_idx++)
-        {
-            std::cout << "{ ";
-            for (int col_idx = 0; col_idx < vertexCount; col_idx++)
-            {
-                std::cout << at(row_idx, col_idx) << ", ";
-            }
-            std::cout << "}" << std::endl;
-        }
-        std::cout << "}" << std::endl;
-    }
-    catch (std::out_of_range &oor)
-    {
-        std::cout << "show: " << oor.what() << std::endl;
-    }
+
 }
 
-/** edge struct */
-
-Edge::Edge() {}
-Edge::Edge(int _beg, int _end, int _weight) : beg(_beg), end(_end), weight(_weight) {}
-
-void Edge::show()
+int** Graph::getNmatrix()
 {
-    std::cout << "beg: " << beg << " end: " << end << " weight: " << weight << std::endl;
+	return matrix;
 }

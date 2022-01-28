@@ -9,7 +9,9 @@
 #include <numeric>
 #include <cstdlib>
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
+#include <stdint.h>
 #include <vector>
 #include <algorithm>
 #include <utility>
@@ -22,9 +24,15 @@
 
 using mutation_pair = std::pair<std::vector<int> &, std::vector<int> &>;
 using crossing_pair = std::pair<std::vector<int>, std::vector<int>>;
+using namespace std::chrono;
 
-std::vector<int> inversion_mutation(std::vector<int> &path);
+std::vector<int> new_random_path(std::vector<int>& path);
+std::vector<int> inversion_mutation(std::vector<int>& path);
+std::vector<int> transposition_mutation(std::vector<int>& path);
 std::vector<int> scramble_mutation(std::vector<int> &path);
+std::vector<int> displacement_mutation(std::vector<int>& path);
+
+
 crossing_pair choose_path(std::vector<int> &path1, std::vector<int> &path2);
 crossing_pair corssover_pmx(std::vector<int> &path1, std::vector<int> &path2);
 std::vector<int> crossover_ox(std::vector<int> &path1, std::vector<int> &path2);

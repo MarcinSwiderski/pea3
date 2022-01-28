@@ -2,6 +2,7 @@
 
 int main()
 {
-    menu();
+    Menu menu;
+    menu.enable();
     return 0;
 }

@@ -2,7 +2,7 @@
 
 /** Params */
 
-Params::Params() : duration(4), init_population_size(4), crossover_factor(0.2), mutation_factor(0.2)
+Params::Params() : duration(30), init_population_size(4), crossover_factor(0.8), mutation_factor(0.01)
 {
 }
 

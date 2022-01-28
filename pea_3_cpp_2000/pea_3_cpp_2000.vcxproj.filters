@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FileReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="genetic_tsp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,9 +32,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileReader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="genetic_tsp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -1,27 +1,88 @@
-#include "genetic_tsp.hpp"
+﻿#include "genetic_tsp.hpp"
 
-std::vector<int> inversion_mutation(std::vector<int> &path)
+
+/** population */
+
+// pure randomness
+std::vector<int> new_random_path(std::vector<int>& init_path)
 {
-    std::vector<int> res_path(path);
+    std::vector<int> new_path(init_path);
+    std::random_shuffle(new_path.begin() + 1, new_path.end() - 1);
+    return new_path;
+}
+
+// inversion mutation
+std::vector<int> inversion_mutation(std::vector<int>& init_path)
+{
+    std::vector<int> new_path(init_path);
     int rand_vertex1, rand_vertex2;
     int smaller_idx, larger_idx;
     do
     {
-        rand_vertex1 = rand() % (res_path.size() - 2) + 1;
-        rand_vertex2 = rand() % (res_path.size() - 2) + 1;
+        rand_vertex1 = rand() % (new_path.size() - 2) + 1;
+        rand_vertex2 = rand() % (new_path.size() - 2) + 1;
     } while (rand_vertex1 == rand_vertex2);
-
     smaller_idx = std::min(rand_vertex1, rand_vertex2);
     larger_idx = std::max(rand_vertex1, rand_vertex2);
-    int mid_idx = (larger_idx + smaller_idx + 1) / 2;
-
-    for (; smaller_idx < mid_idx; smaller_idx++, larger_idx--)
-    {
-        std::swap(res_path[smaller_idx], res_path[larger_idx]);
-        //std::cout << "swap: " << smaller_idx << "|" << larger_idx << std::endl;
-    }
-    return res_path;
+    std::reverse(new_path.begin() + smaller_idx, new_path.end() - larger_idx);
+    return new_path;
 }
+
+// transportation mutation - swaping two cities
+std::vector<int> transposition_mutation(std::vector<int>& init_path)
+{
+    std::vector<int> new_path(init_path);
+    int first_idx, second_idx;
+    do
+    {
+        first_idx = rand() % (new_path.size() - 2) + 1;
+        second_idx = rand() % (new_path.size() - 2) + 1;
+    } while (first_idx == second_idx
+        && new_path[first_idx + 1] != new_path[second_idx]
+        && new_path[first_idx - 1] != new_path[second_idx]);
+    std::swap(new_path[first_idx], new_path[second_idx]);
+    return new_path;
+}
+
+// displacement mutation - injecting city into different position
+std::vector<int> displacement_mutation(std::vector<int>& init_path)
+{
+    std::vector<int> new_path(init_path);
+    int first_idx, second_idx, store;
+    do
+    {
+        first_idx = rand() % (new_path.size() - 2) + 1;
+        second_idx = rand() % (new_path.size() - 2) + 1;
+    } while (first_idx == second_idx);
+    store = new_path[first_idx];
+    new_path.erase(new_path.begin() + first_idx);
+    new_path.insert(new_path.begin(), second_idx, store);
+    return new_path;
+}
+
+//// transpotion mutation
+//std::vector<int> transpotion_mutation(std::vector<int> &path)
+//{
+//    std::vector<int> res_path(path);
+//    int rand_vertex1, rand_vertex2;
+//    int smaller_idx, larger_idx;
+//    do
+//    {
+//        rand_vertex1 = rand() % (res_path.size() - 2) + 1;
+//        rand_vertex2 = rand() % (res_path.size() - 2) + 1;
+//    } while (rand_vertex1 == rand_vertex2);
+//
+//    smaller_idx = std::min(rand_vertex1, rand_vertex2);
+//    larger_idx = std::max(rand_vertex1, rand_vertex2);
+//    int mid_idx = (larger_idx + smaller_idx + 1) / 2;
+//
+//    for (; smaller_idx < mid_idx; smaller_idx++, larger_idx--)
+//    {
+//        std::swap(res_path[smaller_idx], res_path[larger_idx]);
+//        //std::cout << "swap: " << smaller_idx << "|" << larger_idx << std::endl;
+//    }
+//    return res_path;
+//}
 
 crossing_pair choose_path(std::vector<int> &path1, std::vector<int> &path2)
 {
@@ -68,7 +129,7 @@ crossing_pair corssover_pmx(std::vector<int> &path1, std::vector<int> &path2)
             size_t position_idx = position_p2 - (path2.begin() + 1);
 
             if (position_idx >= res_path1.size())
-                break;
+                continue;
 
             if (position_idx < smaller_idx || position_idx > larger_idx)
             {
@@ -82,7 +143,7 @@ crossing_pair corssover_pmx(std::vector<int> &path1, std::vector<int> &path2)
                 std::vector<int>::iterator position_p3 = std::find(path2.begin(), path2.end(), path1[position_idx]);
                 size_t position_idx_bufor = position_p3 - path2.begin();
                 if (position_idx_bufor >= res_path2.size())
-                    break;
+                    continue;
                 res_path1[position_p3 - path2.begin()] = path2[idx];
             }
         }
@@ -99,7 +160,7 @@ crossing_pair corssover_pmx(std::vector<int> &path1, std::vector<int> &path2)
             size_t position_idx = position_p2 - path1.begin();
             
             if (position_idx >= res_path2.size())
-                break;
+                continue;
 
             if (position_idx < smaller_idx || position_idx > larger_idx)
             {
@@ -114,7 +175,7 @@ crossing_pair corssover_pmx(std::vector<int> &path1, std::vector<int> &path2)
                 std::vector<int>::iterator position_p3 = std::find(path1.begin(), path1.end(), path2[position_idx]);
                 size_t position_idx_bufor = position_p3 - path1.begin();
                 if (position_idx_bufor >= res_path2.size())
-                    break;
+                    continue;
                 res_path2[position_idx_bufor] = path1[idx];
             }
         }
@@ -146,14 +207,6 @@ double tsp(std::vector<int> path, Graph &graph)
     return res;
 }
 
-/** population */
-
-std::vector<int> new_random_path(std::vector<int> &init_path)
-{
-    std::vector<int> new_path(init_path);
-    std::random_shuffle(new_path.begin() + 1, new_path.end() - 1);
-    return new_path;
-}
 
 void show_path(std::vector<int> &path)
 {
@@ -170,9 +223,33 @@ std::vector<std::vector<int>> create_random_population(Graph &graph, Params &par
     // create init path
     std::vector<int> init_path(graph.getVertexCount());
     std::iota(std::begin(init_path), std::end(init_path), 0);
-    std::random_shuffle(init_path.begin(), init_path.end());
-    init_path.push_back(init_path.front());
+    //
+    //cout << endl;
+    //for (int i = 0; i < graph.getVertexCount(); i++)
+    //{
+    //    cout<< init_path[i]<<" ";
+    //}
+    //cout << endl;
 
+    std::random_shuffle(init_path.begin(), init_path.end());
+
+    //cout <<"po miksie"<< endl;
+    //for (int i = 0; i < graph.getVertexCount(); i++)
+    //{
+    //    cout << init_path[i] << " ";
+    //}
+    //cout << endl;
+
+    
+	init_path.push_back(init_path.front());
+
+    cout <<"po miksie"<< endl;
+    for (int i = 0; i < graph.getVertexCount(); i++)
+    {
+        cout << init_path[i] << " ";
+    }
+    cout << endl;
+ 
     // create init population
     std::vector<std::vector<int>> init_population(params.init_population_size);
     for (int i = 0; i < params.init_population_size; i++)
@@ -214,7 +291,7 @@ void mutate_population(std::vector<std::vector<int>> &population, Params &params
         int random = rand() % 101;
         if (random < params.crossover_factor * 100)
         {
-            population[idx] = inversion_mutation(population[idx]);
+            population[idx] = transposition_mutation(population[idx]);
         }
     }
 }
@@ -259,9 +336,21 @@ void show_generation(std::vector<std::vector<int>> &population, int gen_idx)
     std::cout << "}" << std::endl;
 }
 
-bool operation_criterion(Params &params, std::chrono::time_point<std::chrono::system_clock> &starttime, std::chrono::seconds &timelimit)
+bool operation_criterion(Params &params, std::chrono::time_point<std::chrono::high_resolution_clock > &starttime, std::chrono::seconds &timelimit)
 {
-    return std::chrono::system_clock::now() - starttime < timelimit;
+    typedef std::chrono::high_resolution_clock Time;
+    typedef std::chrono::seconds ms;
+    typedef std::chrono::duration<float> fsec;
+    std::chrono::time_point<std::chrono::system_clock, seconds> time_point;
+    auto t0 = Time::now();
+    fsec fs =  t0 - starttime;
+    ms s = std::chrono::duration_cast<ms>(fs);
+    ms d = std::chrono::duration_cast<ms>(fs);
+
+    std::cout << "Czas na ukończenie programu: "<< timelimit.count() << endl;
+    std::cout << fs.count() << endl;
+    system("cls");
+    return std::chrono::high_resolution_clock::now() - starttime < timelimit;
 }
 
 void genetic_algorithm_tsp(Graph &graph, Params &params)
@@ -274,49 +363,46 @@ void genetic_algorithm_tsp(Graph &graph, Params &params)
     // init population
     std::vector<std::vector<int>> population = create_random_population(graph, params);
 
-    /*
-    std::cout << "inversion mutation:" << std::endl;
-    std::vector<int> mut_path = inversion_mutation(population[population.size() - 1]);
-    show_path(mut_path);
+   //std::cout << "inversion mutation:" << std::endl;
+   // std::vector<int> mut_path = transpotion_mutation(population[population.size() - 1]);
+   // show_path(mut_path);
 
-    std::cout << "corssing pmx:" << std::endl;
-    crossing_pair cross_path_pair = corssover_pmx(population[population.size() - 1], population[population.size() - 2]);
-    show_path(cross_path_pair.first);
-    show_path(cross_path_pair.second);
-    */
+   // std::cout << "corssing pmx:" << std::endl;
+   // crossing_pair cross_path_pair = corssover_pmx(population[population.size() - 1], population[population.size() - 2]);
+   // show_path(cross_path_pair.first);
+   // show_path(cross_path_pair.second);
 
-    /*
-    // crossover
-    crossover_population(population, params);
-    // mutation
-    show_generation(population, 1);
-    mutate_population(population, params);
-    // survivors selection
-    show_generation(population, 2);
-    select_survivors(population, params.init_population_size, graph, global_best_path, global_best_path_val);
-    show_generation(population, 3);
-    */
-    /*
-    show_generation(population, 1);
-    crossover_population(population, params);
-    show_generation(population, 2);
-    mutate_population(population, params);
-    show_generation(population, 3);
-    select_survivors(population, params.init_population_size, graph, global_best_path, global_best_path_val);
-    show_generation(population, 4);
-    */
+
+    //// crossover
+    //crossover_population(population, params);
+    //// mutation
+    //show_generation(population, 1);
+    //mutate_population(population, params);
+    //// survivors selection
+    //show_generation(population, 2);
+    //select_survivors(population, params.init_population_size, graph, global_best_path, global_best_path_val);
+    //show_generation(population, 3);
+
+    //show_generation(population, 1);
+    //crossover_population(population, params);
+    //show_generation(population, 2);
+    //mutate_population(population, params);
+    //show_generation(population, 3);
+    //select_survivors(population, params.init_population_size, graph, global_best_path, global_best_path_val);
+    //show_generation(population, 4);
+ 
 
    
-    crossing_pair cp = corssover_pmx(population[0], population[1]);
-    show_path(population[0]);
-    show_path(population[1]);
-    show_path(cp.first);
-    show_path(cp.second);
+    //crossing_pair cp = corssover_pmx(population[0], population[1]);
+    //show_path(population[0]);
+    //show_path(population[1]);
+    //show_path(cp.first);
+    //show_path(cp.second);
   
 
     int generation_idx = 0;
     std::chrono::seconds timelimit = std::chrono::seconds{(int)params.duration};
-    std::chrono::time_point<std::chrono::system_clock> starttime = std::chrono::system_clock::now();
+    std::chrono::time_point<std::chrono::high_resolution_clock > starttime = std::chrono::high_resolution_clock::now();
     while (operation_criterion(params, starttime, timelimit))
     {
         // crossover
